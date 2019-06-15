@@ -1,0 +1,17 @@
+[package]
+name = "eip"
+version = "0.1.0"
+authors = ["wyhaya <wyhaya@gmail.com>"]
+edition = "2018"
+
+description = "Get your external ip address"
+homepage = "https://github.com/wyhaya/eip"
+repository = "https://github.com/wyhaya/eip.git"
+readme = "README.md"
+keywords = [
+    "ip",
+    "address",
+    "command"
+]
+
+[dependencies]
