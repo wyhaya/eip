@@ -4,7 +4,7 @@
 
 A command line program for getting your external ip address.
 
-# Install
+### Install
 
 [Download](https://github.com/wyhaya/eip/releases) on the release page
 
@@ -14,10 +14,11 @@ Or use `cargo` to install
 cargo install eip
 ```
 
-# Usage
+### Usage
 
 ```bash
 $ eip
 $ 34.88.20.20
 ```
 
+---
