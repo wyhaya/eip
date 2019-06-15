@@ -38,7 +38,7 @@ fn request(addr: &(&str, &str)) -> std::io::Result<String> {
     );
     connect.write_all(req.as_bytes())?;
 
-    let mut res = std::io::BufReader::new(&connect);
+    let mut res = std::io::BufReader::new(connect);
 
     Ok(parse_body(res.fill_buf()?))
 }
@@ -52,4 +52,22 @@ fn parse_body(data: &[u8]) -> String {
         }
     }
     String::new()
+}
+
+
+#[cfg(test)]
+mod tests {
+    use crate::parse_body;
+
+    #[test]
+    fn test_request() {
+
+    }
+
+    #[test]
+    fn test_parse_body() {
+        assert_eq!(parse_body(b"\r\n\r\n0"), "0");
+        assert_eq!(parse_body(b"GET / HTTP/1.1\r\n\r\n0"), "0");
+    }
+
 }

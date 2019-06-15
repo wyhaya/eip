@@ -2,6 +2,7 @@
 name = "eip"
 version = "0.1.0"
 authors = ["wyhaya <wyhaya@gmail.com>"]
+license = "MIT"
 edition = "2018"
 
 description = "Get your external ip address"
