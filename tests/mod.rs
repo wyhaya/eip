@@ -1,4 +1,3 @@
-
 use std::process::Command;
 
 #[test]
@@ -8,11 +7,9 @@ fn test_run() {
     match Command::new(path).output() {
         Ok(cmd) => {
             assert!(cmd.status.success());
-        },
+        }
         Err(err) => {
             panic!(err);
         }
     }
 }
-
-

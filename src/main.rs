@@ -54,15 +54,12 @@ fn parse_body(data: &[u8]) -> String {
     String::new()
 }
 
-
 #[cfg(test)]
 mod tests {
     use crate::parse_body;
 
     #[test]
-    fn test_request() {
-
-    }
+    fn test_request() {}
 
     #[test]
     fn test_parse_body() {
