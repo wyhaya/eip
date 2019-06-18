@@ -1,3 +1,5 @@
+use nix;
+use nix::ifaddrs::InterfaceAddress;
 use std::io::prelude::*;
 
 const REQUEST_ADDTESS: &[(&str, &str)] = &[
@@ -10,25 +12,75 @@ const REQUEST_ADDTESS: &[(&str, &str)] = &[
 ];
 
 fn main() {
-    let mut spawns = vec![];
+    let args = std::env::args().collect::<Vec<String>>();
+
+    if let Some(arg) = args.get(1) {
+        if arg == "-e" {
+            return external();
+        }
+    }
+
+    return internal();
+}
+
+fn external() {
+    let mut threads = vec![];
 
     for addr in REQUEST_ADDTESS {
-        let spawn = std::thread::spawn(move || {
-            if let Ok(ip) = request(&addr) {
+        let thread = std::thread::spawn(move || {
+            if let Ok(ip) = http(&addr) {
                 print!("{}", ip);
                 std::process::exit(0);
             }
         });
-        spawns.push(spawn)
+        threads.push(thread);
     }
 
-    for spawn in spawns {
+    for spawn in threads {
         let _ = spawn.join();
     }
-    eprintln!("\x1b[91merror: \x1b[0m{}", "Cannot get external ip address");
+
+    eprintln!("error: Cannot get external ip address");
+    std::process::exit(1);
 }
 
-fn request(addr: &(&str, &str)) -> std::io::Result<String> {
+fn internal() {
+    let address = match nix::ifaddrs::getifaddrs() {
+        Ok(address) => address,
+        Err(err) => {
+            eprintln!("error: {:?}", err);
+            std::process::exit(1);
+        }
+    };
+
+    let mut networks: Vec<Vec<InterfaceAddress>> = vec![];
+    for ifaddr in address {
+        let index = networks
+            .iter()
+            .position(|item| item[0].interface_name == ifaddr.interface_name);
+
+        if let Some(i) = index {
+            networks[i].push(ifaddr);
+        } else {
+            networks.push(vec![ifaddr]);
+        }
+    }
+
+    for network in networks {
+        if let None = network[0].address {
+            continue;
+        }
+        println!("{}:", network[0].interface_name);
+
+        for item in network {
+            for ip in item.address {
+                println!("    {}", ip);
+            }
+        }
+    }
+}
+
+fn http(addr: &(&str, &str)) -> std::io::Result<String> {
     let mut connect = std::net::TcpStream::connect(addr.0)?;
 
     let req = format!(
@@ -40,12 +92,12 @@ fn request(addr: &(&str, &str)) -> std::io::Result<String> {
 
     let mut res = std::io::BufReader::new(connect);
 
-    Ok(parse_body(res.fill_buf()?))
+    Ok(body(res.fill_buf()?))
 }
 
-const SPLIT: &[u8] = &[13, 10, 13, 10];
+fn body(data: &[u8]) -> String {
+    const SPLIT: &[u8] = &[13, 10, 13, 10];
 
-fn parse_body(data: &[u8]) -> String {
     for (i, item) in data.windows(SPLIT.len()).enumerate() {
         if item == SPLIT {
             return String::from_utf8_lossy(&data[i + SPLIT.len()..]).to_string();
@@ -56,15 +108,15 @@ fn parse_body(data: &[u8]) -> String {
 
 #[cfg(test)]
 mod tests {
-    use crate::parse_body;
+    use super::*;
 
     #[test]
-    fn test_request() {}
+    fn test_http() {}
 
     #[test]
-    fn test_parse_body() {
-        assert_eq!(parse_body(b"\r\n\r\n0"), "0");
-        assert_eq!(parse_body(b"GET / HTTP/1.1\r\n\r\n0"), "0");
+    fn test_body() {
+        assert_eq!(body(b"\r\n\r\n0"), "0");
+        assert_eq!(body(b"GET / HTTP/1.1\r\n\r\n0"), "0");
     }
 
 }
