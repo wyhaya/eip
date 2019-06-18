@@ -67,13 +67,9 @@ fn internal() {
     }
 
     for network in networks {
-        let any = network.iter().any(|item| {
-            if let None = item.address {
-                false
-            }else {
-                true
-            }
-        });
+        let any = network
+            .iter()
+            .any(|item| if let None = item.address { false } else { true });
         if any {
             println!("{}:", network[0].interface_name);
             for item in network {
