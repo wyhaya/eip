@@ -19,7 +19,7 @@ cargo install eip
 
 ## Usage
 
-![preview](https://user-images.githubusercontent.com/23690145/59667842-ff692880-91e9-11e9-80b0-c80e92cf7813.png)
+![preview](https://user-images.githubusercontent.com/23690145/59670246-33dee380-91ee-11e9-85e8-0cca0006013b.png)
 
 Get internal address
 
