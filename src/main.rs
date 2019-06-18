@@ -43,12 +43,12 @@ fn request(addr: &(&str, &str)) -> std::io::Result<String> {
     Ok(parse_body(res.fill_buf()?))
 }
 
+const SPLIT: &[u8] = &[13, 10, 13, 10];
+
 fn parse_body(data: &[u8]) -> String {
-    for i in 0..data.len() {
-        if data.len() - 4 >= i {
-            if &data[i..i + 4] == &[13, 10, 13, 10] {
-                return String::from_utf8_lossy(&data[i + 4..]).to_string();
-            }
+    for (i, item) in data.windows(SPLIT.len()).enumerate() {
+        if item == SPLIT {
+            return String::from_utf8_lossy(&data[i + SPLIT.len()..]).to_string();
         }
     }
     String::new()
