@@ -25,8 +25,7 @@ before_install:
 
 script:
   - if [ -z $TRAVIS_TAG ]; then cargo fmt --all -- --check  ; fi
-  - if [ -z $TRAVIS_TAG ]; then cargo test --release        ; fi
-  - if [ -z $TRAVIS_TAG ]; then cargo run --release         ; fi
+  - if [ -z $TRAVIS_TAG ]; then cargo test                  ; fi
   - if [ -z $TRAVIS_TAG ]; then cargo build --release       ; fi
 
 after_script: set +e
