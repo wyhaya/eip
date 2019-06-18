@@ -5,7 +5,7 @@ authors = ["wyhaya <wyhaya@gmail.com>"]
 license = "MIT"
 edition = "2018"
 
-description = "Get your external ip address"
+description = "Get your ip address"
 homepage = "https://github.com/wyhaya/eip"
 repository = "https://github.com/wyhaya/eip.git"
 readme = "README.md"
