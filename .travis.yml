@@ -34,18 +34,20 @@ before_deploy:
   - cd ../../
 
 deploy: 
+
   - provider: releases
     api_key:
       secure: $GITHUB_TOKEN
     file_glob: true
     file: ./target/release/$CRATE_NAME-$TRAVIS_TAG-$TARGET.*
-    on:
-      condition: $TRAVIS_RUST_VERSION = stable
-      tags: true
     skip_cleanup: true
+    on:
+      tags: true
+
   - provider: cargo
     token: $CARGO_TOKEN
     on:
+      condition: $TARGET = linux
       tags: true
 
 cache: cargo
