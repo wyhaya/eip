@@ -10,10 +10,10 @@ env:
 matrix:
   include:
 
-    - env: TARGET=x86_64-linux
+    - env: TARGET=linux
       os: linux
 
-    - env: TARGET=x86_64-osx
+    - env: TARGET=osx
       os: osx
 
 before_install:
@@ -31,19 +31,22 @@ after_script: set +e
 before_deploy:
   - cd ./target/release/
   - zip $CRATE_NAME-$TRAVIS_TAG-$TARGET.zip $CRATE_NAME
-  - mv $CRATE_NAME-$TRAVIS_TAG-$TARGET.zip ../../
   - cd ../../
 
 deploy: 
-  api_key:
-    secure: eoWs1cBAdILCFV1m6IRLkUR7NzwTZnRKA/mfVmR2uY30eBYZzYl/VEwI/PZnttbWxj8+jlTWublVc4zVbHJCZyPtefEme0dKuJXpWjdLnEjmxWeHAHh5Ovas6XGRAA6R5L6PYWIBcIz5AG+X73zKgPslf8rxvzeu/idjDadRY2s9SnpF9yuWu8ts0Tq1/sXka2LFBOm24Oq+g6Es2X0y1+hsmpYSd6f+x2uxJPYMr5BB4D90WLblHm/buwLrSTKGSFE+t6HZcrz/S5wYdpOvX3+5w79WBLCYSdVejUHejnq6p9bGbWateQjq2oZOTy02Y6S373VPhTTbuJz7IQXK4TuR36mzTy8xJ2RYULl64y3IaOn3Lb7ptJ5YZHWsKPwLs5KFCzdqbZjhTZLjU9YCgAE1PAvtFE91Wdic52qVRcyHDMCkhOdP61ZjRmSuv5qm4t4hbtnUGz1mfgcyhtHhZAIV5NORvmz6Tn9AK3gnqR6ZKhakYDrhXdY0LOEjtW0kshQ1JjXg9Lwa+ermIOuRPHJPY887MZ7dyeh0yA2qm0h4s3O5wwBtEX9mgT9VzovcVY+z4OYQQX/SMsjDHXmUX1ka3aG1U4zuZRXrSuJwrHfxkjF4Sj8GnEL7OfMKwigFZQOknJfWdbHciaAdfcDdE+Tde+wMcSgdLJWZ8xETFuU=
-  file_glob: true
-  file: $CRATE_NAME-$TRAVIS_TAG-$TARGET.*
-  on:
-    condition: $TRAVIS_RUST_VERSION = stable
-    tags: true
-  provider: releases
-  skip_cleanup: true
+  - provider: releases
+    api_key:
+      secure: $GITHUB_TOKEN
+    file_glob: true
+    file: ./target/release/$CRATE_NAME-$TRAVIS_TAG-$TARGET.*
+    on:
+      condition: $TRAVIS_RUST_VERSION = stable
+      tags: true
+    skip_cleanup: true
+  - provider: cargo
+    token: $CARGO_TOKEN
+    on:
+      tags: true
 
 cache: cargo
 before_cache:
