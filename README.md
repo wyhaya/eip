@@ -2,8 +2,8 @@
 
 # eip
 
-[![Build Status](https://img.shields.io/travis/wyhaya/eip.svg?style=flat-square)](https://travis-ci.org/wyhaya/eip)
-[![Crates.io](https://img.shields.io/crates/l/eip.svg?style=flat-square)](https://github.com/wyhaya/eip/blob/master/LICENSE)
+[![GitHub Workflow Status](https://img.shields.io/github/workflow/status/wyhaya/eip/Build?style=flat-square)](https://github.com/wyhaya/eip/actions)
+[![Crates.io](https://img.shields.io/crates/v/eip.svg?style=flat-square)](https://crates.io/crates/eip)
 
 A command line program for getting your ip address
 

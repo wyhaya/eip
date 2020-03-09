@@ -20,7 +20,7 @@ fn main() {
         }
     }
 
-    return internal();
+    internal()
 }
 
 fn external() {
@@ -67,9 +67,7 @@ fn internal() {
     }
 
     for network in networks {
-        let any = network
-            .iter()
-            .any(|item| if let None = item.address { false } else { true });
+        let any = network.iter().any(|item| item.address.is_some());
         if any {
             println!("{}:", network[0].interface_name);
             for item in network {
@@ -119,5 +117,4 @@ mod tests {
         assert_eq!(body(b"\r\n\r\n0"), "0");
         assert_eq!(body(b"GET / HTTP/1.1\r\n\r\n0"), "0");
     }
-
 }

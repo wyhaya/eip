@@ -1,6 +1,6 @@
 [package]
 name = "eip"
-version = "0.2.2"
+version = "0.2.3"
 authors = ["wyhaya <wyhaya@gmail.com>"]
 license = "MIT"
 edition = "2018"
@@ -16,4 +16,4 @@ keywords = [
 ]
 
 [dependencies]
-nix = "0.14.1"
+nix = "0.17.0"
